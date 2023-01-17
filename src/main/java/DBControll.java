@@ -22,11 +22,11 @@ public class DBControll {
 
             while(resultSet.next()){
 
-                System.out.println("Dane uzytkownika: ");
-                System.out.println("Imię:"+" "+resultSet.getString("first_name"));
-                System.out.println("Nazwisko:"+" "+resultSet.getString("last_name"));
-                System.out.println("Email:"+" "+resultSet.getString("email"));
-                System.out.println("Hasło:"+" "+resultSet.getString("password"));
+                Main.logger.info("Dane uzytkownika: ");
+                Main.logger.info("Imię:"+" "+resultSet.getString("first_name"));
+                Main.logger.info("Nazwisko:"+" "+resultSet.getString("last_name"));
+                Main.logger.info("Email:"+" "+resultSet.getString("email"));
+                Main.logger.info("Hasło:"+" "+resultSet.getString("password"));
 
             }
 
