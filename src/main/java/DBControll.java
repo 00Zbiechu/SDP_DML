@@ -9,9 +9,9 @@ public class DBControll {
      private ResultSet resultSet;
 
 
-    public void selectAccountRowFromAccountTableWhereSurnameAsParam(Connection connection, String surname){
+    public void selectCustomerRowFromCustomerTableWhereSurnameAsParam(Connection connection, String surname){
 
-        final String QUERY = "SELECT * FROM account WHERE last_name=?";
+        final String QUERY = "SELECT * FROM customer WHERE last_name=?";
 
         try{
 
@@ -22,11 +22,13 @@ public class DBControll {
 
             while(resultSet.next()){
 
-                Main.logger.info("Dane uzytkownika: ");
-                Main.logger.info("Imię:"+" "+resultSet.getString("first_name"));
-                Main.logger.info("Nazwisko:"+" "+resultSet.getString("last_name"));
-                Main.logger.info("Email:"+" "+resultSet.getString("email"));
-                Main.logger.info("Hasło:"+" "+resultSet.getString("password"));
+                System.out.println("Dane uzytkownika: -------------------------------- ");
+                System.out.println(resultSet.getString("first_name"));
+                System.out.println(resultSet.getString("last_name"));
+                System.out.println(resultSet.getString("street"));
+                System.out.println(resultSet.getString("city"));
+                System.out.println(resultSet.getString("phone"));
+                System.out.println(resultSet.getString("email"));
 
             }
 
@@ -39,9 +41,9 @@ public class DBControll {
 
     }
 
-    public void updateAccountWhereSurnameAsParam(Connection connection,String oldSurname, String newSurname){
+    public void updateCustomerWhereSurnameAsParam(Connection connection, String oldSurname, String newSurname){
 
-        final String UPDATE = "UPDATE account set last_name=? WHERE last_name=?";
+        final String UPDATE = "UPDATE customer set last_name=? WHERE last_name=?";
 
         try{
 
@@ -61,9 +63,9 @@ public class DBControll {
     }
 
 
-    public void insertDataIntoAccountTable(Connection connection,String name,String surname,String email, String password){
+    public void insertDataIntoCustomerTable(Connection connection,String name,String surname,String street, String city, String phone, String email){
 
-        final String INSERT = "INSERT INTO account(first_name, last_name, email, password) VALUES(?,?,?,?)";
+        final String INSERT = "INSERT INTO customer(first_name, last_name, street, city, phone, email) VALUES(?,?,?,?,?,?)";
 
 
         try{
@@ -72,8 +74,10 @@ public class DBControll {
             preparedStatement = connection.prepareStatement(INSERT);
             preparedStatement.setString(1,name);
             preparedStatement.setString(2,surname);
-            preparedStatement.setString(3,email);
-            preparedStatement.setString(4,password);
+            preparedStatement.setString(3,street);
+            preparedStatement.setString(4,city);
+            preparedStatement.setString(5,phone);
+            preparedStatement.setString(6,email);
             preparedStatement.executeUpdate();
 
 
