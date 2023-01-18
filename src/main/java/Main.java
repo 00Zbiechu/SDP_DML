@@ -24,9 +24,8 @@ public class Main {
     static DBControll dbControll = new DBControll();
 
     private static boolean continueFlag = true;
-    private static int option;
-    private static String surname;
-    private static String surnameSecond;
+    private static int option, id;
+    private static String surname,surnameSecond;
 
     //Variables for Insert Query
     private static String name,street,city,phone,email;
@@ -45,7 +44,8 @@ public class Main {
                 log.info("1. Pokaż wiersz z tabeli Customer dla podanego nazwiska użytkownika");
                 log.info("2. Zmień nazwisko klienta");
                 log.info("3. Dodaj użytkownika");
-                log.info("4. Wyjdź z aplikacji");
+                log.info("4. Usuń pożyczkę");
+                log.info("5. Wyjdź z aplikacji");
                 Scanner scannerForOption = new Scanner(System.in);
                 option = scannerForOption.nextInt();
 
@@ -98,6 +98,12 @@ public class Main {
                         break;
 
                     case 4:
+                        log.info("Podaj id pożyczki klienta do usunięcia:");
+                        Scanner scannerForDelete = new Scanner(System.in);
+                        id = scannerForDelete.nextInt();
+                        dbControll.deleteLoanRowFromCustomerTableWhereIdAsParam(conn,id);
+                        break;
+                    case 5:
                         log.info("Zakończono działanie aplikacji");
                         continueFlag = false;
                         break;

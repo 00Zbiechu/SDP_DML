@@ -94,6 +94,27 @@ public class DBControll {
 
     }
 
+    public void deleteLoanRowFromCustomerTableWhereIdAsParam(Connection connection, int id){
+
+        final String QUERY = "DELETE FROM loan WHERE id=?";
+
+        try{
+
+            //SELECT 1
+            preparedStatement = connection.prepareStatement(QUERY);
+            preparedStatement.setInt(1,id);
+            preparedStatement.execute();
+
+
+        }catch (SQLException e){
+
+            e.printStackTrace();
+
+        }
+
+
+    }
+
     public void closeConnection(){
 
         try{preparedStatement.close();}catch(SQLException e){e.printStackTrace();}
