@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import java.sql.*;
 import java.util.Objects;
 import java.util.Properties;
+import java.util.Scanner;
 
 public class Main {
 
@@ -25,6 +26,16 @@ public class Main {
     public static final Logger logger = LoggerFactory.getLogger(Main.class);
 
 
+
+
+
+    private static boolean continueFlag = true;
+    private static int option;
+
+    private static String surname;
+    private static String surnameSecond;
+
+
     public static void main(String[] args){
 
         useLiquibase();
@@ -32,25 +43,49 @@ public class Main {
 
         try(Connection conn = DriverManager.getConnection(DB_URL,USER,PASS)) {
 
-            System.out.println("Połączono");
+            while(continueFlag){
 
-            System.out.println("Wypisanie danych: -----------------------------------------------------");
-            dbControll.selectCustomerRowFromCustomerTableWhereSurnameAsParam(conn,"Zbiewski");
-            System.out.println("-----------------------------------------------------------------------");
+                System.out.println("Wybierz operację do wykonania:");
+                System.out.println("1. Pokaż wiersz z tabeli Customer dla podanego nazwiska użytkownika");
+                System.out.println("2. Zmień nazwisko klienta");
+                System.out.println("3. Dodaj użytkownika");
+                System.out.println("4. Wyjdź z aplikacji");
+                Scanner scannerOption = new Scanner(System.in);
+                option = scannerOption.nextInt();
 
-            System.out.println("Aktualizacja danych: -----------------------------------------------------");
-            dbControll.updateCustomerWhereSurnameAsParam(conn,"Zbiewski","Nowak");
-            System.out.println("Wypisanie danych: -----------------------------------------------------");
-            dbControll.selectCustomerRowFromCustomerTableWhereSurnameAsParam(conn,"Nowak");
-            System.out.println("-----------------------------------------------------------------------");
+                switch(option){
+                    case 1:
+                        System.out.println("Podaj nazwisko klienta do wypisania jego danych:");
+                        Scanner scannerSurname = new Scanner(System.in);
+                        surname = scannerSurname.nextLine();
+                        dbControll.selectCustomerRowFromCustomerTableWhereSurnameAsParam(conn,surname);
+                        break;
+                    case 2:
+                        System.out.println("Podaj nazwisko klienta, którego nazwsko chcesz zmienić:");
+                        Scanner scannerSurnameForUpdate = new Scanner(System.in);
+                        surname = scannerSurnameForUpdate.nextLine();
 
-            System.out.println("Wprowadzenie danych: -----------------------------------------------------");
-            dbControll.insertDataIntoCustomerTable(conn,"Mateusz","Kowalski","Kwiatowa","Koszalin","123456789","00kowalski@gmail.com");
-            System.out.println("Wypisanie danych: -----------------------------------------------------");
-            dbControll.selectCustomerRowFromCustomerTableWhereSurnameAsParam(conn,"Kowalski");
-            System.out.println("-----------------------------------------------------------------------");
-            System.out.println("Aktualizacja danych: -----------------------------------------------------");
-            dbControll.updateCustomerWhereSurnameAsParam(conn,"Nowak","Zbiewski");
+                        System.out.println("Podaj na jakie inne nazwisko ma zostać zmienione:");
+                        Scanner scannerSurnameForUpdateTwo = new Scanner(System.in);
+                        surnameSecond = scannerSurnameForUpdateTwo.nextLine();
+
+                        dbControll.updateCustomerWhereSurnameAsParam(conn,surname,surnameSecond);
+                        break;
+                    case 3:
+
+                    case 4:
+                        System.out.println("Zakończono działanie aplikacji");
+                        continueFlag = false;
+                        break;
+                    default:
+                        System.out.println("Wybrano złą opcję");
+                        break;
+
+                }
+
+            }
+
+
 
 
         }catch(SQLException e) {
