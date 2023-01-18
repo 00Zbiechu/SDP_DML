@@ -6,8 +6,7 @@ import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
 import liquibase.exception.LiquibaseException;
 import liquibase.resource.ClassLoaderResourceAccessor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 
 import java.sql.*;
@@ -15,6 +14,7 @@ import java.util.Objects;
 import java.util.Properties;
 import java.util.Scanner;
 
+@Slf4j
 public class Main {
 
     static final String DB_URL = "jdbc:postgresql://localhost:9000/bankdb";
@@ -23,17 +23,13 @@ public class Main {
 
     static DBControll dbControll = new DBControll();
 
-    public static final Logger logger = LoggerFactory.getLogger(Main.class);
-
-
-
-
-
     private static boolean continueFlag = true;
     private static int option;
-
     private static String surname;
     private static String surnameSecond;
+
+    //Variables for Insert Query
+    private static String name,street,city,phone,email;
 
 
     public static void main(String[] args){
@@ -45,40 +41,68 @@ public class Main {
 
             while(continueFlag){
 
-                System.out.println("Wybierz operację do wykonania:");
-                System.out.println("1. Pokaż wiersz z tabeli Customer dla podanego nazwiska użytkownika");
-                System.out.println("2. Zmień nazwisko klienta");
-                System.out.println("3. Dodaj użytkownika");
-                System.out.println("4. Wyjdź z aplikacji");
-                Scanner scannerOption = new Scanner(System.in);
-                option = scannerOption.nextInt();
+                log.info("Wybierz operację do wykonania:");
+                log.info("1. Pokaż wiersz z tabeli Customer dla podanego nazwiska użytkownika");
+                log.info("2. Zmień nazwisko klienta");
+                log.info("3. Dodaj użytkownika");
+                log.info("4. Wyjdź z aplikacji");
+                Scanner scannerForOption = new Scanner(System.in);
+                option = scannerForOption.nextInt();
 
                 switch(option){
                     case 1:
-                        System.out.println("Podaj nazwisko klienta do wypisania jego danych:");
-                        Scanner scannerSurname = new Scanner(System.in);
-                        surname = scannerSurname.nextLine();
+                        log.info("Podaj nazwisko klienta do wypisania jego danych:");
+                        Scanner scannerForSurnameSelect = new Scanner(System.in);
+                        surname = scannerForSurnameSelect.nextLine();
                         dbControll.selectCustomerRowFromCustomerTableWhereSurnameAsParam(conn,surname);
                         break;
                     case 2:
-                        System.out.println("Podaj nazwisko klienta, którego nazwsko chcesz zmienić:");
-                        Scanner scannerSurnameForUpdate = new Scanner(System.in);
-                        surname = scannerSurnameForUpdate.nextLine();
+                        log.info("Podaj nazwisko klienta, którego nazwsko chcesz zmienić:");
+                        Scanner scannerForUpdateNew = new Scanner(System.in);
+                        surname = scannerForUpdateNew.nextLine();
 
-                        System.out.println("Podaj na jakie inne nazwisko ma zostać zmienione:");
-                        Scanner scannerSurnameForUpdateTwo = new Scanner(System.in);
-                        surnameSecond = scannerSurnameForUpdateTwo.nextLine();
+                        log.info("Podaj na jakie inne nazwisko ma zostać zmienione:");
+                        Scanner scannerForUpdateOld = new Scanner(System.in);
+                        surnameSecond = scannerForUpdateOld.nextLine();
 
                         dbControll.updateCustomerWhereSurnameAsParam(conn,surname,surnameSecond);
                         break;
                     case 3:
+                        log.info("Podaj wartości do wprowadzenia:");
+
+                        log.info("Podaj imie klienta:");
+                        Scanner scannerForFirstName = new Scanner(System.in);
+                        name = scannerForFirstName.nextLine();
+
+                        log.info("Podaj nazwisko klienta:");
+                        Scanner scannerForInsertSurname = new Scanner(System.in);
+                        surname = scannerForInsertSurname.nextLine();
+
+                        log.info("Podaj ulicę klienta:");
+                        Scanner scannerForStreet = new Scanner(System.in);
+                        street = scannerForStreet.nextLine();
+
+                        log.info("Podaj miasto klienta:");
+                        Scanner scannerForCity = new Scanner(System.in);
+                        city = scannerForCity.nextLine();
+
+                        log.info("Podaj nr telefonu klienta:");
+                        Scanner scannerForPhone = new Scanner(System.in);
+                        phone = scannerForPhone.nextLine();
+
+                        log.info("Podaj email klienta:");
+                        Scanner scannerForMail = new Scanner(System.in);
+                        email = scannerForMail.nextLine();
+
+                        dbControll.insertDataIntoCustomerTable(conn,name,surname,street,city,phone,email);
+                        break;
 
                     case 4:
-                        System.out.println("Zakończono działanie aplikacji");
+                        log.info("Zakończono działanie aplikacji");
                         continueFlag = false;
                         break;
                     default:
-                        System.out.println("Wybrano złą opcję");
+                        log.info("Wybrano złą opcję");
                         break;
 
                 }
@@ -92,7 +116,7 @@ public class Main {
             e.printStackTrace();
         }finally {
 
-        System.out.println("Zamykanie połączenia");
+        log.info("Zamykanie połączenia");
         dbControll.closeConnection();
 
     }

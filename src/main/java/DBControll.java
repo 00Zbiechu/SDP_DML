@@ -1,8 +1,11 @@
+import lombok.extern.slf4j.Slf4j;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+@Slf4j
 public class DBControll {
 
      private PreparedStatement preparedStatement;
@@ -22,13 +25,13 @@ public class DBControll {
 
             while(resultSet.next()){
 
-                System.out.println("Dane uzytkownika: -------------------------------- ");
-                System.out.println(resultSet.getString("first_name"));
-                System.out.println(resultSet.getString("last_name"));
-                System.out.println(resultSet.getString("street"));
-                System.out.println(resultSet.getString("city"));
-                System.out.println(resultSet.getString("phone"));
-                System.out.println(resultSet.getString("email"));
+                log.info("Dane uzytkownika: -------------------------------- ");
+                log.info(resultSet.getString("first_name"));
+                log.info(resultSet.getString("last_name"));
+                log.info(resultSet.getString("street"));
+                log.info(resultSet.getString("city"));
+                log.info(resultSet.getString("phone"));
+                log.info(resultSet.getString("email"));
 
             }
 
